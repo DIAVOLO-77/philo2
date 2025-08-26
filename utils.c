@@ -27,11 +27,15 @@ int	ft_atoi(const char *str)
 
 void	display_message(t_philo *philo, char *message)
 {
+	bool stopped;
+	long long ts;
+
 	pthread_mutex_lock(&philo->data->write_mutex);
 	pthread_mutex_lock(&philo->data->data_mutex);
-	if (!philo->data->stop)
-		printf("%lld %d %s\n", get_time() - philo->data->start_time,
-			philo->id, message);
+	stopped = philo->data->stop;
+	ts = get_time() - philo->data->start_time;
+	if (!stopped)
+		printf("%lld %d %s\n", ts, philo->id, message);
 	pthread_mutex_unlock(&philo->data->data_mutex);
 	pthread_mutex_unlock(&philo->data->write_mutex);
 }
@@ -49,6 +53,8 @@ int	check_args(int argc, char **argv)
 		j = 0;
 		while (argv[i][j])
 		{
+			while(argv[i][j] == '+')
+				j++;
 			if (argv[i][j] < '0' || argv[i][j] > '9')
 				return (1);
 			j++;
