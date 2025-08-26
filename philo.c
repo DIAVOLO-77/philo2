@@ -6,30 +6,22 @@ void	eat(t_philo *philo)
 	display_message(philo, "has taken a fork");
 	pthread_mutex_lock(&philo->data->forks[philo->right_fork]);
 	display_message(philo, "has taken a fork");
-
 	pthread_mutex_lock(&philo->data->data_mutex);
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->data->data_mutex);
-
 	display_message(philo, "is eating");
-
-	/* interruptible eat: wake early if simulation stopped */
 	{
 		long long start = get_time();
 		while (!is_simulation_over(philo)
 			&& (get_time() - start) < philo->data->time_to_eat)
 			usleep(500);
 	}
-
-	/* update meal count only if simulation still running (mimic original behavior)
-	   if simulation stopped during eating, ensure forks are released before exit */
 	if (!is_simulation_over(philo))
 	{
 		pthread_mutex_lock(&philo->data->data_mutex);
 		philo->nb_meals++;
 		pthread_mutex_unlock(&philo->data->data_mutex);
 	}
-
 	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
 	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
 }
@@ -52,7 +44,6 @@ void	*philosopher_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	/* mark the starting time for this philosopher to avoid early monitor deaths */
 	pthread_mutex_lock(&philo->data->data_mutex);
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->data->data_mutex);

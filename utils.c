@@ -2,9 +2,9 @@
 
 int	ft_atoi(const char *str)
 {
-	long	result;
-	int		sign;
-	int		i;
+	int result;
+	int sign;
+	int i;
 
 	result = 0;
 	sign = 1;
@@ -14,15 +14,21 @@ int	ft_atoi(const char *str)
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
-			sign = -1;
+			sign *= -1;
 		i++;
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		result = result * 10 + (str[i] - '0');
+		int digit = str[i] - '0';
+	if (result > (INT_MAX - digit) / 10)
+			return (-1);
+		result = result * 10 + digit;
 		i++;
 	}
-	return ((int)(result * sign));
+	result = result * sign;
+	if (result > INT_MAX || result < INT_MIN)
+		return (-1);
+	return ((int)result);
 }
 
 void	display_message(t_philo *philo, char *message)
@@ -53,8 +59,6 @@ int	check_args(int argc, char **argv)
 		j = 0;
 		while (argv[i][j])
 		{
-			while(argv[i][j] == '+')
-				j++;
 			if (argv[i][j] < '0' || argv[i][j] > '9')
 				return (1);
 			j++;

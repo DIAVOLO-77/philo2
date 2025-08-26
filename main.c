@@ -1,4 +1,5 @@
 #include "philo.h"
+#include <string.h>
 
 int	run_philosophers(t_data *data, int argc, char **argv)
 {
@@ -27,6 +28,7 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
+	memset(&data, 0, sizeof(t_data));
 	if (check_args(argc, argv))
 	{
 		printf("Usage: %s number_of_philosophers time_to_die time_to_eat "
