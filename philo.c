@@ -2,6 +2,8 @@
 
 void	eat(t_philo *philo)
 {
+	long long	start;
+
 	pthread_mutex_lock(&philo->data->forks[philo->left_fork]);
 	display_message(philo, "has taken a fork");
 	pthread_mutex_lock(&philo->data->forks[philo->right_fork]);
@@ -11,7 +13,7 @@ void	eat(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->data_mutex);
 	display_message(philo, "is eating");
 	{
-		long long start = get_time();
+		start = get_time();
 		while (!is_simulation_over(philo)
 			&& (get_time() - start) < philo->data->time_to_eat)
 			usleep(500);
@@ -28,9 +30,11 @@ void	eat(t_philo *philo)
 
 void	sleep_think(t_philo *philo)
 {
+	long long	start;
+
 	display_message(philo, "is sleeping");
 	{
-		long long start = get_time();
+		start = get_time();
 		while (!is_simulation_over(philo)
 			&& (get_time() - start) < philo->data->time_to_sleep)
 			usleep(500);

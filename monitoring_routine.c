@@ -12,13 +12,12 @@ static void	handle_one_philo(t_data *data)
 static int	check_philo_death(t_data *data, int i)
 {
 	long long	last_meal;
-	bool	stopped;
+	bool		stopped;
 
 	pthread_mutex_lock(&data->data_mutex);
 	last_meal = data->philosophers[i].last_meal;
 	stopped = data->stop;
 	pthread_mutex_unlock(&data->data_mutex);
-
 	if ((get_time() - last_meal) > data->time_to_die && !stopped)
 	{
 		pthread_mutex_lock(&data->write_mutex);
@@ -26,7 +25,6 @@ static int	check_philo_death(t_data *data, int i)
 			get_time() - data->start_time,
 			data->philosophers[i].id);
 		pthread_mutex_unlock(&data->write_mutex);
-
 		pthread_mutex_lock(&data->data_mutex);
 		data->stop = true;
 		pthread_mutex_unlock(&data->data_mutex);

@@ -2,9 +2,10 @@
 
 int	ft_atoi(const char *str)
 {
-	int result;
-	int sign;
-	int i;
+	int	result;
+	int	sign;
+	int	i;
+	int	digit;
 
 	result = 0;
 	sign = 1;
@@ -19,22 +20,19 @@ int	ft_atoi(const char *str)
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		int digit = str[i] - '0';
-	if (result > (INT_MAX - digit) / 10)
+		digit = str[i] - '0';
+		if (result > (INT_MAX - digit) / 10)
 			return (-1);
 		result = result * 10 + digit;
 		i++;
 	}
-	result = result * sign;
-	if (result > INT_MAX || result < INT_MIN)
-		return (-1);
-	return ((int)result);
+	return (result * sign);
 }
 
 void	display_message(t_philo *philo, char *message)
 {
-	bool stopped;
-	long long ts;
+	long long	ts;
+	bool		stopped;
 
 	pthread_mutex_lock(&philo->data->write_mutex);
 	pthread_mutex_lock(&philo->data->data_mutex);
@@ -57,6 +55,8 @@ int	check_args(int argc, char **argv)
 	while (i < argc)
 	{
 		j = 0;
+		if (argv[i][j] == '+')
+			j++;
 		while (argv[i][j])
 		{
 			if (argv[i][j] < '0' || argv[i][j] > '9')
