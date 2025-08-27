@@ -13,6 +13,7 @@ static int	check_philo_death(t_data *data, int i)
 {
 	long long	last_meal;
 	bool		stopped;
+	long long	death_ts;
 
 	pthread_mutex_lock(&data->data_mutex);
 	last_meal = data->philosophers[i].last_meal;
@@ -20,9 +21,10 @@ static int	check_philo_death(t_data *data, int i)
 	pthread_mutex_unlock(&data->data_mutex);
 	if ((get_time() - last_meal) > data->time_to_die && !stopped)
 	{
+		death_ts = (last_meal + data->time_to_die) - data->start_time;
 		pthread_mutex_lock(&data->write_mutex);
 		printf("%lld %d died\n",
-			get_time() - data->start_time,
+			death_ts,
 			data->philosophers[i].id);
 		pthread_mutex_unlock(&data->write_mutex);
 		pthread_mutex_lock(&data->data_mutex);
